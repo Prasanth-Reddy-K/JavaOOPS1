@@ -1,0 +1,130 @@
+import java.util.*;
+public class CarPrice {
+	private String model;
+	public String getmodelname()  {
+		return this.model;
+	}
+	public int price() {
+		model=new Car().getmodel();
+		if(model.equals("Polo Trendline"))
+			return 870000;
+		else if(model.equals("Polo Highline"))
+			return 1009000;
+		else if(model.equals("virtus Trendline"))
+			return 1105000;
+		else if(model.equals("Virtus Highline"))
+			return 1308000;
+		else if(model.equals("Taigan Trendline"))
+			return 1489000;
+		else if(model.equals("Taigun Highline"))
+			return 1542000;
+		else if(model.equals("Taigun Topline"))
+			return 1771000;
+		else
+			return 0;
+		}
+		Scanner sc=new Scanner(System.in);
+		public boolean checkinsurance()
+		{
+			System.out.println("select yes for insurance");
+			String s=sc.next();
+			if(s.equalsIgnoreCase("yes"))
+				return true;
+			return false;
+		}
+		public boolean checkAccessories()
+		{
+			System.out.println("Select yes for Accessories");
+			String s=sc.next();
+			if(s.equalsIgnoreCase("yes"))
+				return true;
+			return false;
+		}	
+}
+
+
+import java.util.*;
+public class Total {
+	private int Totalcost;
+	private final int RTO=113990;
+	private final int tcscharge=11000;
+	public int Totalcost() {
+		CarPrice p=new CarPrice();
+		int carprice=p.price();
+		String discount;
+		Scanner sc=new Scanner(System.in);
+		int discount1;
+		boolean insurance=p.checkinsurance();
+		boolean accessories=p.checkAccessories();
+		if(carprice==0) {
+			System.out.println("Please select a valid model");
+			return 0;
+		}
+		else
+		{
+			Totalcost+=carprice;
+			int insurance1=0;
+			int acessories1=0;
+			if(insurance)
+			{
+				insurance1=47300;
+				Totalcost+=insurance1;
+			}
+			if(accessories)
+			{
+				acessories1=15000;
+				Totalcost+=acessories1;
+			}
+			Totalcost+=RTO;
+			Totalcost+=tcscharge;
+			System.out.println("Dealer discount:");
+			discount=sc.next();
+			int len=discount.length();
+			if(discount.substring(len-1).equals("%"))
+			{
+				discount1=carprice*Integer.parseInt(discount.substring(0,len-1))/100;
+			}
+			else
+			{
+				discount1=Integer.parseInt(discount);
+			}
+			if(!(insurance || accessories))
+			{
+				discount1=0;
+			}
+			Totalcost-=discount1;
+			System.out.println("Total cost"+Totalcost+"("+p.getmodelname()+ carprice + " + 1,13,990(RTO) + " + insurance1+"(Insurance) + " +
+					"11,000(TCS)" +" + "+ acessories1 + "(Additional Accessories)" +"-"+ discount1 +"(Dealer discount)");
+			return Totalcost;
+		}
+	}
+}
+
+import java.util.*;
+public class Car extends Total{
+	private static String model;
+	Scanner sc=new Scanner(System.in);
+	public String getmodel()
+	{
+		System.out.println("Select any model available:");
+		this.model=sc.nextLine();
+		return model;
+	}
+	public static void main(String args[])
+	{
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Available car models");
+		System.out.println("Polo Trendline");
+		System.out.println("Polo Highline");
+		System.out.println("virtus Trendline");
+		System.out.println("Virtus Highline");
+		System.out.println("Taigan Trendline");
+		System.out.println("Taigun Highline");
+		System.out.println("Taigun Topline");
+		Total t=new Total();
+		int Totalcost=t.Totalcost();
+		if(Totalcost==0)
+			System.exit(0);
+	}
+
+}
