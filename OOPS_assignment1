@@ -1,76 +1,83 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Scanner;
+public class cardealer {
+			public String carmodel;
+			public String insurance;
+			public String add_accessories;
+			public String discount;
+			public long RTO=113990;
+			public long TCSCharges=11000;
+			public long discount_amt=0;
+			public void getCarModel()
+			{
+				Scanner sc=new Scanner(System.in);
+				System.out.println("Select car model: ");
+				carmodel=sc.nextLine();
+				System.out.println("Do you need insurance");
+				insurance=sc.nextLine();
+				System.out.println("Do you need Additional Accessories: ");
+				add_accessories=sc.nextLine();
+				System.out.println("Dealer discount: ");
+				discount=sc.nextLine();
+				sc.close();
+			}
+				
+			public void getCost(String carName,long cost)
+			{
+				long total=cost+RTO+TCSCharges;
+				int insurance_amt=0;
+				int add_accessories_amt=0;
+				if (insurance.equals("yes") || insurance.equals("YES")){
+					insurance_amt=47300;
+					total+=insurance_amt;
+				}
+				if (add_accessories.equals("yes") || insurance.equals("YES")) {
+					add_accessories_amt=15000;
+					total+=add_accessories_amt;
+				}
+				if (discount.endsWith("%")) {
+					discount=discount.replace("%","");
+					discount_amt=Integer.valueOf(discount)*cost/100;
+				}
+				else
+					discount_amt=Integer.valueOf(discount);
+				if(discount_amt>30000) {
+					System.out.println("Maximum discount should not cross 30000!");
+				}
+				if(!insurance.equalsIgnoreCase("yes") && !add_accessories.equalsIgnoreCase("yes") && discount_amt > 0) {
+					System.out.println("Any one of the additional features have to be added!");
+					discount_amt=0;
+				}
+				if(insurance.equalsIgnoreCase("yes") || add_accessories.equalsIgnoreCase("yes") && discount_amt <= 30000) {
+					total-=discount_amt;
+				}
+				System.out.println();
+				System.out.println("Total cost "+total+"("+carmodel+" "+cost+" + "+RTO+"(RTO) + "+insurance_amt+"(Insurance) + "+TCSCharges+"(TCS) + "+add_accessories_amt+"(Additional Accessories) - "+discount_amt+"(Dealer discount))");
+		
+			}
+	}
 
-class Driver {
-    private String carModel;
-    private double rating;
-    private double distanceFromCustomer;
-    private String predestination;
 
-    public Driver(String carModel, double rating, double distanceFromCustomer, String predestination) {
-        this.carModel = carModel;
-        this.rating = rating;
-        this.distanceFromCustomer = distanceFromCustomer;
-        this.predestination = predestination;
-    }
 
-    public String getCarModel() {
-        return carModel;
-    }
 
-    public double getRating() {
-        return rating;
-    }
 
-    public double getDistanceFromCustomer() {
-        return distanceFromCustomer;
-    }
-
-    public String getPredestination() {
-        return predestination;
-    }
-}
-
-class Main {
-    private static final double CHARGE_PER_KM = 8;
-
-    public static void main(String[] args) {
-        // Sample input
-        double rideDistance = 43;
-        String carRequested = "Sedan";
-
-        List<Driver> drivers = new ArrayList<>();
-        drivers.add(new Driver("Sedan", 4.0, 500, "Gurgaon, Noida, Delhi"));
-        drivers.add(new Driver("Hatchback", 4.3, 1000, "Gurgaon"));
-        drivers.add(new Driver("5-Seater", 4.8, 200, "Noida"));
-        drivers.add(new Driver("Sedan", 4.1, 700, "Noida"));
-        drivers.add(new Driver("Hatchback", 4.7, 430, "Delhi"));
-
-        // Find the suitable driver
-        Driver suitableDriver = findSuitableDriver(rideDistance, carRequested, drivers);
-
-        if (suitableDriver != null) {
-            System.out.println("Driver " + suitableDriver.getCarModel() + " will get you to the destination.");
-            double totalCharge = rideDistance * CHARGE_PER_KM;
-            System.out.println("Your charge will be Rs " + totalCharge);
-        } else {
-            System.out.println("No suitable driver found for the requested car.");
+public class cardealeruse extends cardealer{
+	public static void main(String[] args) {
+		cardealeruse cdu=new cardealeruse();
+		String[] arr= new String[]{"Polo Trendline","Polo Highline","Virtus Trendline","Virtus Highline","Taigun Trendline","Taigun Highline","Taigun Topline"};
+		long[] cost=new long[]{870000,1009000,1105000,1308000,1489000,1542000,1771000};
+        
+        for(int i=0;i<arr.length;i++){
+            System.out.println(arr[i] + " " + cost[i]);
         }
-    }
-
-    private static Driver findSuitableDriver(double rideDistance, String carRequested, List<Driver> drivers) {
-        Driver suitableDriver = null;
-        double minDistance = Double.MAX_VALUE;
-
-        for (Driver driver : drivers) {
-            if (driver.getCarModel().equals(carRequested) && driver.getRating() >= 4.0) {
-                if (driver.getDistanceFromCustomer() < minDistance) {
-                    minDistance = driver.getDistanceFromCustomer();
-                    suitableDriver = driver;
-                }
-            }
-        }
-
-        return suitableDriver;
-    }
+		cdu.getCarModel();
+		for(int i=0;i<arr.length;i++)
+	  {
+			
+			if(arr[i].equals(cdu.carmodel))
+			{
+				cdu.getCost(arr[i],cost[i]);
+				
+			}
+		}
+	}
 }
